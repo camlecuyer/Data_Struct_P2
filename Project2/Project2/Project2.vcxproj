@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="InfixEvaluator.cpp" />
     <ClCompile Include="InfixEvaluator.h" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>

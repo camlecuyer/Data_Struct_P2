@@ -1,18 +1,20 @@
 // Created by Cameron L'Ecuyer
 // Last Modified: 10/31/2015
 
+#ifndef INFIXEVALUATOR_H_
+#define INFIXEVALUATOR_H_
+
 #include <stack>
 #include <cctype>
 #include <iostream>
+#include <string>
 using namespace::std;
-
-const string OPERATORS[] = 
-	{"||", "&&", "==", "!=", ">", ">=", "<", "<=", "+", "-", "*", "/", "%", "^", "-", "--", "++", "!", "(", ")", "[", "]", "{", "}"};
-const int PRECEDENCE[] = {1, 2, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6, 7, 8, 8, 8, 8, -1, -1, -1, -1, -1, -1};
 
 class InfixEvaluator
 {
 private:
+	static const string OPERATORS[];
+	static const int PRECEDENCE[];
 	stack<string> operators;
 	stack<int> operands;
 
@@ -22,12 +24,9 @@ public:
 	{
 	} // end default constructor
 
-	int evaluate(string& input)
-	{
-		return 0;
-	} // end evaluate
+	int evaluate(string input);
 
-	string removeWhiteSpace(string input)
+	/*string removeWhiteSpace(string input)
 	{
 		string temp = "";
 		for(int i = 0; i < input.size(); i++)
@@ -50,20 +49,16 @@ public:
 		} // end loop
 
 		return temp;
-	} // end removeWhiteSpace
+	} // end removeWhiteSpace*/
 
-	bool isOperator(string input)
+	/*bool isOperator(char input)
 	{
 		return false;
-	} // end isOperator
+	} // end isOperator*/
 
-	int evaluateOperators(string& operatorInput)
-	{
-		return 0;
-	} // end evaluateOperators
+	int evaluateOperators(string& operatorInput);
 
-	int convertNumbers(string& input)
-	{
-		return 0;
-	} // end convertNumbers
+	int convertNumbers(string& input);
 }; // end class InfixEvaluator
+
+#endif
