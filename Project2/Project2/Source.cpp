@@ -7,5 +7,13 @@ using namespace::std;
 
 void main()
 {
+	InfixEvaluator eval;
 
+	try
+	{
+		eval.removeWhiteSpace("2 3");
+	}
+	catch(exception e)
+	{
+	}
 } // end main

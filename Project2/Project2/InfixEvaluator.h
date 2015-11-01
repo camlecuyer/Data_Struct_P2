@@ -3,6 +3,7 @@
 
 #include <stack>
 #include <cctype>
+#include <iostream>
 using namespace::std;
 
 const string OPERATORS[] = 
@@ -13,24 +14,48 @@ class InfixEvaluator
 {
 private:
 	stack<string> operators;
-	stack<string> operands;
+	stack<int> operands;
 
 public:
 	// Default constructor
 	InfixEvaluator()
 	{
-
 	} // end default constructor
-
-	string removeWhiteSpace(string input)
-	{
-		return "";
-	} // end removeWhiteSpace
 
 	int evaluate(string& input)
 	{
 		return 0;
 	} // end evaluate
+
+	string removeWhiteSpace(string input)
+	{
+		string temp = "";
+		for(int i = 0; i < input.size(); i++)
+		{
+			if(input[i] == ' ')
+			{
+				if(i > 0 && isdigit(input[i-1]) && isdigit(input[i+1]))
+				{
+					cout << "Two operands in a row @ char " << i;
+				}
+				else if(i > 0 && isOperator(input[i-1]) && isOperator(input[i+1]))
+				{
+					cout << "Two operands in a row @ char " << i;
+				}// end if
+			}
+			else
+			{
+				temp += input[i];
+			} // end if
+		} // end loop
+
+		return temp;
+	} // end removeWhiteSpace
+
+	bool isOperator(string input)
+	{
+		return false;
+	} // end isOperator
 
 	int evaluateOperators(string& operatorInput)
 	{
