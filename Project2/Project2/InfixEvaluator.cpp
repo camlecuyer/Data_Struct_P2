@@ -10,26 +10,25 @@ const int InfixEvaluator::PRECEDENCE[] = {1, 2, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6,
 
 int InfixEvaluator::evaluate(string input)
 {
+	input = removeWhiteSpace(input);
+
 	if(input[0] == ')' || input[0] == '}' || input[0] == ']')
 	{
 		cout << "Expression cannot start with closing parenthesis @ char 0";
-		throw exception();
+		throw exception("Error Occurred");
 	}
 	else if(input[0] == '<' || input[0] == '>' || input[0] == '=')
 	{
 		cout << "Expression cannot start with binary operator @ char 0";
-		throw exception();
+		throw exception("Error Occurred");
 	}
 
 	int result = 0;
 	string temp = "";
-	bool updated = false;
-	int i = 0;
+	size_t i = 0;
 
 	while(i < input.length())
 	{
-		updated = false;
-
 		if(input[i] == '=')
 		{
 			temp += input[i];
@@ -38,33 +37,23 @@ int InfixEvaluator::evaluate(string input)
 			if(input[i] != '=')
 			{
 				cout << "Invalid operator = @ char " << i << endl;
-				throw exception();
+				throw exception("Error Occurred");
 			}
 			else
 			{
 				temp += input[i];
-				operators.push(temp);
-				updated = true;
-				temp = "";
 			} // end if
-		} // end if
-
-		if(input[i] == '!')
+		}
+		else if(input[i] == '!')
 		{
 			temp += input[i];
-			i++;
 
-			if(input[i] == '=')
+			if(input[i + 1] == '=')
 			{
 				temp += input[i];
 			} // end if
-
-			operators.push(temp);
-			updated = true;
-			temp = "";
-		} // end if
-
-		if(input[i] == '|')
+		}
+		else if(input[i] == '|')
 		{
 			temp += input[i];
 			i++;
@@ -72,18 +61,14 @@ int InfixEvaluator::evaluate(string input)
 			if(input[i] != '|')
 			{
 				cout << "Invalid operator | @ char " << i << endl;
-				throw exception();
+				throw exception("Error Occurred");
 			}
 			else
 			{
 				temp += input[i];
-				operators.push(temp);
-				updated = true;
-				temp = "";
 			} // end if
-		} // end if
-
-		if(input[i] == '&')
+		}
+		else if(input[i] == '&')
 		{
 			temp += input[i];
 			i++;
@@ -91,167 +76,204 @@ int InfixEvaluator::evaluate(string input)
 			if(input[i] != '&')
 			{
 				cout << "Invalid operator & @ char " << i << endl;
-				throw exception();
+				throw exception("Error Occurred");
 			}
 			else
 			{
 				temp += input[i];
-				operators.push(temp);
-				updated = true;
-				temp = "";
 			} // end if
-		} // end if
-
-		if(input[i] == '<')
+		} 
+		else if(input[i] == '<')
 		{
 			temp += input[i];
-			i++;
+
+			if(input[i + 1] == '=')
+			{
+				i++;
+				temp += input[i];	
+			} // end if
+		}
+		else if(input[i] == '>')
+		{
+			temp += input[i];
 
 			if(input[i] == '=')
 			{
+				i++;
 				temp += input[i];
 			} // end if
-
-			operators.push(temp);
-			updated = true;
-			temp = "";
-		} // end if
-
-		if(input[i] == '>')
+		} 
+		else if(input[i] == '+')
 		{
 			temp += input[i];
-			i++;
 
-			if(input[i] == '=')
+			if(input[i + 1] == '+')
 			{
+				i++;
 				temp += input[i];
 			} // end if
-
-			operators.push(temp);
-			updated = true;
-			temp = "";
-		} // end if
-
-		if(input[i] == '+')
+		}
+		else if(input[i] == '-')
 		{
-			temp += input[i];
-			i++;
-
-			if(input[i] == '+')
+			if(input[i + 1] == '-')
 			{
+				i++;
 				temp += input[i];
-			} // end if
-
-			operators.push(temp);
-			updated = true;
-			temp = "";
-		} // end if
-
-		if(input[i] == '-')
-		{
-			if(!isdigit(input[i-1]) || !isdigit(input[i-2]))
+			}
+			else if(i == 0)
+			{
+				temp += '.';
+			}
+			else if(i >= 1 && !isdigit(input[i-1]))
 			{
 				temp += '.';
 			}
 			else
 			{
 				temp += input[i];
-			}// end if
-
-			i++;
-
-			if(input[i] == '-')
-			{
-				temp += input[i];
 			} // end if
-
-			operators.push(temp);
-			updated = true;
-			temp = "";
-		} // end if
-
-		if(input[i] == '*' || input[i] == '/' || input[i] == '%' || input[i] == '^')
+		}
+		else if(input[i] == '*' || input[i] == '/' || input[i] == '%' || input[i] == '^')
 		{
 			temp += input[i];
-			i++;
-			operators.push(temp);
-			updated = true;
-			temp = "";
-		} // end if
-
-		if(input[i] == '(' || input[i] == ')' || input[i] == '[' || input[i] == ']' || input[i] == '{' || input[i] == '}')
+		}
+		else if(input[i] == '(' || input[i] == '[' || input[i] == '{' || input[i] == ')' || input[i] == ']' || input[i] == '}')
 		{
 			temp += input[i];
-			i++;
-			operators.push(temp);
-			updated = true;
-			temp = "";
-		} // end if
-
-		if(isdigit(input[i]))
+		}
+		else if(isdigit(input[i]))
 		{
-			while(isdigit(input[i]))
+			temp += input[i];
+
+			while(isdigit(input[i + 1]))
 			{
-				temp += input[i];
 				i++;
+				temp += input[i];
 			} // end loop
 				
 			operands.push(convertNumbers(temp));
-			updated = true;
 			temp = "";
-		} // end if
-
-		if(!updated)
+		}
+		else if(input[i] == ' ')
 		{
-			if(isalpha(input[i]))
-			{
-				cout << "Letters are invalid input @ char " << i << endl;
-				throw exception();
-			} // end if
-
 			if(isdigit(input[i-1]) && isdigit(input[i+1]))
 			{
 				cout << "Two operands in a row @ char " << i << endl;
-				throw exception();
+				throw exception("Error Occurred");
 			} // end if
 
 			if((input[i-1] == '|' || input[i-1] == '&') && (input[i+1] == '|' || input[i+1] == '&'))
 			{
 				cout << "Two operators in a row @ char " << i << endl;
-				throw exception();
+				throw exception("Error Occurred");
 			} // end if
+		}
+		else
+		{
+			cout << "Invalid character input @ char " << i << endl;
+			throw exception("Error Occurred");
+		}// end if
 
-			i++;
+		if(temp == ")" || temp == "]" || temp == "}")
+		{
+			while(operators.size() > 0 && ((operators.top() != "(") && (operators.top() != "[") && (operators.top() != "{")))
+			{
+				operands.push(evaluateOperators(operators.top()));
+				operators.pop();
+			} // end loop
+
+			operators.pop();
+
+			temp = "";
 		} // end if
+
+		if(temp != "")
+		{
+			if(operators.size() > 0 && (precedence(operators.top()) >= precedence(temp)))
+			{
+				while(operators.size() > 0 && precedence(operators.top()) >= precedence(temp))
+				{
+					operands.push(evaluateOperators(operators.top()));
+					operators.pop();
+				} // end loop
+			} // end if
+				
+			operators.push(temp);
+			temp = "";
+		} // end if
+
+		i++;
 	} // end loop
+
+	while(!operators.empty())
+	{
+		operands.push(evaluateOperators(operators.top()));
+		operators.pop();
+	} // end loop
+
+	if(!operands.empty())
+	{
+		result = operands.top();
+		operands.pop();
+	}
+	else
+	{
+		throw exception("Operand stack is empty");
+	}// end if 
+
+	if(!operands.empty())
+	{
+		throw exception("Operand stack should be empty");
+	} // end if
 
 	return result;
 } // end evaluate
 
-/*string removeWhiteSpace(string input)
+string InfixEvaluator::removeWhiteSpace(string input)
 {
 	string temp = "";
-	for(int i = 0; i < input.size(); i++)
+	input = input.erase(0, input.find_first_not_of(" "));
+	input = input.erase(input.find_last_not_of(" ") + 1);
+
+	size_t i = 0;
+	bool spaceFound = false;
+
+	while(i < input.length())
 	{
 		if(input[i] == ' ')
 		{
-			if(i > 0 && isdigit(input[i-1]) && isdigit(input[i+1]))
+			if(!spaceFound)
 			{
-				cout << "Two operands in a row @ char " << i;
-			}
-			else if(i > 0 && isOperator(input[i-1]) && isOperator(input[i+1]))
-			{
-				cout << "Two operands in a row @ char " << i;
-			}// end if
+				temp += input[i];
+				spaceFound = true;
+			} // end if
 		}
 		else
 		{
+			spaceFound = false;
 			temp += input[i];
+		} // end if
+
+		i++;
+	} // end loop
+	
+	return temp;
+} // end removeWhiteSpace
+
+int InfixEvaluator::precedence(string input)
+{
+	int i = 0;
+
+	for(i; i < 24; i++)
+	{
+		if(input == OPERATORS[i])
+		{
+			break;
 		} // end if
 	} // end loop
 
-	return temp;
-} // end removeWhiteSpace*/
+	return PRECEDENCE[i];
+} // end precedence
 
 /*bool isOperator(char input)
 {
@@ -271,14 +293,25 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		} // end if
 	} // end loop
 
+	if (operands.empty()) 
+	{
+		throw exception("Stack is empty");
+	} // end if
+
 	int temp1, temp2;
+
+	temp1 = operands.top();
+	operands.pop();
 
 	switch(i)
 	{
 		case 0:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -287,8 +320,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 1:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -297,8 +333,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 2:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -307,8 +346,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 3:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -317,8 +359,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 4:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -327,8 +372,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 5:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -337,8 +385,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 6:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -347,8 +398,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 7:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -357,8 +411,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 8:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -367,8 +424,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 9:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -377,8 +437,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 10:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -387,18 +450,29 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 11:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
+
+			if(temp2 == 0)
+			{
+				throw exception("Divide by zero error attempted");
+			} // end if
 
 			return temp2 / temp1;
 			break;
 		}
 		case 12:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -407,8 +481,11 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 13:
 		{
-			temp1 = operands.top();
-			operands.pop();
+			if (operands.empty()) 
+			{
+				throw exception("Stack is empty");
+			} // end if
+
 			temp2 = operands.top();
 			operands.pop();
 
@@ -435,33 +512,21 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 		}
 		case 14:
 		{
-			temp1 = operands.top();
-			operands.pop();
-
 			return 0 - temp1;
 			break;
 		}
 		case 15:
 		{
-			temp1 = operands.top();
-			operands.pop();
-
 			return --temp1;
 			break;
 		}
 		case 16:
 		{
-			temp1 = operands.top();
-			operands.pop();
-
 			return ++temp1;
 			break;
 		}
 		case 17:
 		{
-			temp1 = operands.top();
-			operands.pop();
-
 			return !temp1;
 			break;
 		}

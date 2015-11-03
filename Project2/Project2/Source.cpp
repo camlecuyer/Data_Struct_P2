@@ -3,6 +3,7 @@
 
 #include "InfixEvaluator.cpp"
 #include <iostream>
+#include <string>
 using namespace::std;
 
 void main()
@@ -11,12 +12,13 @@ void main()
 
 	try
 	{
-		//eval.removeWhiteSpace("2 3");
-		//eval.evaluate("123");
-		//eval.evaluate("123 + 5 * 6");
-		eval.evaluate("123+5*6");
+		cout << eval.evaluate("123 + 5 * 6") << endl;
+		cout << eval.evaluate("123+5*6") << endl;
+		cout << eval.evaluate("(-4) * 6 + 8 / 2 ^ 2") << endl;
+		cout << eval.evaluate("4 <= 4") << endl;
 	}
 	catch(exception e)
 	{
+		cout << e.what();
 	}
 } // end main

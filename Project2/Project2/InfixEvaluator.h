@@ -26,30 +26,9 @@ public:
 
 	int evaluate(string input);
 
-	/*string removeWhiteSpace(string input)
-	{
-		string temp = "";
-		for(int i = 0; i < input.size(); i++)
-		{
-			if(input[i] == ' ')
-			{
-				if(i > 0 && isdigit(input[i-1]) && isdigit(input[i+1]))
-				{
-					cout << "Two operands in a row @ char " << i;
-				}
-				else if(i > 0 && isOperator(input[i-1]) && isOperator(input[i+1]))
-				{
-					cout << "Two operands in a row @ char " << i;
-				}// end if
-			}
-			else
-			{
-				temp += input[i];
-			} // end if
-		} // end loop
+	string removeWhiteSpace(string input);
 
-		return temp;
-	} // end removeWhiteSpace*/
+	int precedence(string input);
 
 	/*bool isOperator(char input)
 	{
