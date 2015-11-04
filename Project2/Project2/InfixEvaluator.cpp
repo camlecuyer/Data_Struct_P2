@@ -2,11 +2,12 @@
 // Last Modified: 10/31/2015
 
 #include "InfixEvaluator.h"
-using namespace::std;
 
-const string InfixEvaluator::OPERATORS[] = 
+//const string InfixEvaluator::OPERATORS[] = 
+const string OPERATORS[] =
 	{"||", "&&", "==", "!=", ">", ">=", "<", "<=", "+", "-", "*", "/", "%", "^", ".", "--", "++", "!", "(", ")", "[", "]", "{", "}"};
-const int InfixEvaluator::PRECEDENCE[] = {1, 2, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6, 7, 8, 8, 8, 8, -1, -1, -1, -1, -1, -1};
+//const int InfixEvaluator::PRECEDENCE[] = {1, 2, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6, 7, 8, 8, 8, 8, -1, -1, -1, -1, -1, -1};
+const int PRECEDENCE[] = {1, 2, 3, 3, 4, 4, 4, 4, 5, 5, 6, 6, 6, 7, 8, 8, 8, 8, -1, -1, -1, -1, -1, -1};
 
 int InfixEvaluator::evaluate(string input)
 {
@@ -458,7 +459,7 @@ int InfixEvaluator::evaluateOperators(string& operatorInput)
 			temp2 = operands.top();
 			operands.pop();
 
-			if(temp2 == 0)
+			if(temp1 == 0)
 			{
 				throw exception("Divide by zero error attempted");
 			} // end if

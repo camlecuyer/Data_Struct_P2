@@ -1,10 +1,8 @@
 // Created by Cameron L'Ecuyer
 // Last Modified: 10/31/2015
 
-#include "InfixEvaluator.cpp"
-#include <iostream>
-#include <string>
-using namespace::std;
+//#include "InfixEvaluator.cpp"
+#include "InfixEvaluator.h"
 
 void main()
 {
