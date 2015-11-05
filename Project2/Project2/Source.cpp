@@ -7,8 +7,10 @@ void main()
 {
 	InfixEvaluator eval;
 
+	// try/catch block to catch thrown errors
 	try
 	{
+		// Various tests of the Infix Evaluator
 		cout << eval.evaluate("123 + 5 * 6") << endl;
 		cout << eval.evaluate("123+5*6") << endl;
 		cout << eval.evaluate("(-4) * 6 + 8 / 2 ^ 2") << endl;
@@ -18,6 +20,10 @@ void main()
 		cout << eval.evaluate("++3 == --5") << endl;
 		cout << eval.evaluate("[11 - 8] != 2*6 || ++8 > 4^4") << endl;
 		cout << eval.evaluate("4^4") << endl;
+		cout << eval.evaluate("3<4") << endl;
+		cout << eval.evaluate("5>4") << endl;
+		//cout << eval.evaluate("4/0") << endl;
+		//cout << eval.evaluate("4*b") << endl;
 	}
 	catch(exception e)
 	{
