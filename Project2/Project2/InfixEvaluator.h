@@ -1,5 +1,5 @@
 // Created by Cameron L'Ecuyer
-// Last Modified: 10/31/2015
+// Last Modified: 11/04/2015
 
 #ifndef INFIXEVALUATOR_H
 #define INFIXEVALUATOR_H
@@ -29,6 +29,8 @@ public:
 	int InfixEvaluator::evaluate(string input)
 	{
 		input = removeWhiteSpace(input);
+
+		bool lastNum = false;
 
 		if(input[0] == ')' || input[0] == '}' || input[0] == ']')
 		{
@@ -68,6 +70,7 @@ public:
 
 				if(input[i + 1] == '=')
 				{
+					i++;
 					temp += input[i];
 				} // end if
 			}
@@ -115,7 +118,7 @@ public:
 			{
 				temp += input[i];
 
-				if(input[i] == '=')
+				if(input[i + 1] == '=')
 				{
 					i++;
 					temp += input[i];
@@ -135,6 +138,7 @@ public:
 			{
 				if(input[i + 1] == '-')
 				{
+					temp += input[i];
 					i++;
 					temp += input[i];
 				}
@@ -142,7 +146,7 @@ public:
 				{
 					temp += '.';
 				}
-				else if(i >= 1 && !isdigit(input[i-1]))
+				else if(i >= 1 && !lastNum)
 				{
 					temp += '.';
 				}
@@ -170,6 +174,7 @@ public:
 				} // end loop
 				
 				operands.push(convertNumbers(temp));
+				lastNum = true;
 				temp = "";
 			}
 			else if(input[i] == ' ')
@@ -200,6 +205,7 @@ public:
 					operators.pop();
 				} // end loop
 
+				lastNum = false;
 				operators.pop();
 
 				temp = "";
@@ -207,9 +213,9 @@ public:
 
 			if(temp != "")
 			{
-				if(operators.size() > 0 && (precedence(operators.top()) >= precedence(temp)))
+				if(operators.size() > 0 && (precedence(operators.top()) >= precedence(temp))  && (precedence(temp) > 0))
 				{
-					while(operators.size() > 0 && precedence(operators.top()) >= precedence(temp))
+					while(operators.size() > 0 && (precedence(operators.top()) >= precedence(temp)))
 					{
 						operands.push(evaluateOperators(operators.top()));
 						operators.pop();
@@ -217,6 +223,7 @@ public:
 				} // end if
 				
 				operators.push(temp);
+				lastNum = false;
 				temp = "";
 			} // end if
 
@@ -450,7 +457,7 @@ public:
 				temp2 = operands.top();
 				operands.pop();
 
-				return temp1 - temp2;
+				return temp2 - temp1;
 				break;
 			}
 			case 10:
